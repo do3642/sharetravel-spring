@@ -11,8 +11,7 @@ import com.mbc.sharetravel_spring.domain.Member;
 import lombok.Data;
 
 @Data
-public class UserDetailsImpl implements UserDetails {
-
+public class UserDetailsImpl implements UserDetails{
 	private Member member;
 	
 	public UserDetailsImpl(Member member) {

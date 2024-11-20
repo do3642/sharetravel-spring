@@ -4,12 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import com.mbc.sharetravel_spring.domain.Member;
 import com.mbc.sharetravel_spring.repository.MemberRepository;
 
+
+
+
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-	
 	@Autowired
 	private MemberRepository memberRepository;
 	
@@ -24,5 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		return new UserDetailsImpl(principal);
 
 	}
+	
 	
 }

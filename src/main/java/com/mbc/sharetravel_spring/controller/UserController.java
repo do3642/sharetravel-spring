@@ -22,12 +22,20 @@ public class UserController {
 	private MemberService memberService;
 	
 	
-	@PostMapping("/register")
-	public ResponseEntity<?> signup(@RequestBody Member member) {
+	@PostMapping("/User-Register")
+	public ResponseEntity<?> userRegister(@RequestBody Member member) {
 		memberService.insert(member);
 		
 		return new ResponseEntity<>("회원가입성공",HttpStatus.OK);
 	}
+	
+	@PostMapping("/Company-Register")
+	public ResponseEntity<?> companyRegister(@RequestBody Member member) {
+		memberService.insert(member);
+		
+		return new ResponseEntity<>("회원가입성공",HttpStatus.OK);
+	}
+
 
 	
 

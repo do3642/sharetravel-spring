@@ -1,5 +1,9 @@
 package com.mbc.sharetravel_spring.service;
 
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +33,15 @@ public class MemberService {
 		member.setRole(RoleType.COMPANY);
 		
 		memberRepository.save(member);
+	}
+	
+	
+	
+	// auth의 아이디를 db에 대조해서 꺼낼때 사용
+	public Member getMember(String username) {
+	    Member member = memberRepository.findByUsername(username).orElseThrow(() -> new EntityNotFoundException("Member not found"));
+		
+		return member;
 	}
 	
 }

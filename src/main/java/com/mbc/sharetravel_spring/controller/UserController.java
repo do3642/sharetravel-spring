@@ -67,6 +67,23 @@ public class UserController {
 		}
 	
 	
+	
+	@GetMapping("/user")
+	public ResponseEntity<?> userInfo(Authentication auth) {
+//		System.out.println(auth.getName());
+		String username = auth.getName();
+		Member member = memberService.getMember(username);
+		return new ResponseEntity<>(member,HttpStatus.OK);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@GetMapping("/test")
 	public String test() {
 		return "Hello React & Spring Boot!";

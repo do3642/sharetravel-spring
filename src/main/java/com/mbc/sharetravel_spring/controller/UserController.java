@@ -31,7 +31,7 @@ public class UserController {
 	
 	@PostMapping("/Company-Register")
 	public ResponseEntity<?> companyRegister(@RequestBody Member member) {
-		memberService.insert(member);
+		memberService.companyInsert(member);
 		
 		return new ResponseEntity<>("회원가입성공",HttpStatus.OK);
 	}

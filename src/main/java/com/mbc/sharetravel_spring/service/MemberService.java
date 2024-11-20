@@ -23,5 +23,12 @@ public class MemberService {
 		
 		memberRepository.save(member);
 	}
+	// 회원가입
+	public void companyInsert(Member member) {
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
+		member.setRole(RoleType.COMPANY);
+		
+		memberRepository.save(member);
+	}
 	
 }

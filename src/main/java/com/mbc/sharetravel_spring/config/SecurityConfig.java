@@ -17,12 +17,16 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mbc.sharetravel_spring.fillter.JwtFilter;
+import com.mbc.sharetravel_spring.security.AuthEntryPoint;
 
 @Configuration
 public class SecurityConfig {
 	
 	@Autowired
 	private JwtFilter jwtFilter;
+	
+	@Autowired
+	private AuthEntryPoint authEntryPoint;
 	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,7 +40,11 @@ public class SecurityConfig {
 				.antMatchers(HttpMethod.POST,"/login","/register").permitAll()
 				.anyRequest().authenticated()
 				.and()
+					.exceptionHandling()
+					.authenticationEntryPoint(authEntryPoint)
+				.and()
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+				
 			
 			
 			return http.build();

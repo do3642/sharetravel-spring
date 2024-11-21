@@ -37,11 +37,13 @@ public class PostController {
     public ResponseEntity<?> testImg(@RequestParam("image") MultipartFile file) throws Exception{
        String fileName = file.getOriginalFilename();
 //       Path path = Paths.get("/travelBdImg", fileName);
-       Path path = Paths.get("travel_img", fileName);
+//       Path path = Paths.get("travel_img", fileName);
+       Path path = Paths.get("travelimg/", fileName);
        System.out.println(path.getParent());
+       System.out.println("파일 저장 경로: " + path.toAbsolutePath());
        Files.createDirectories(path.getParent());
        Files.write(path, file.getBytes());
 
-       return new ResponseEntity<>("/travel_img/"+fileName, HttpStatus.OK);
+       return new ResponseEntity<>("/travelimg/"+fileName, HttpStatus.OK);
     }
 }

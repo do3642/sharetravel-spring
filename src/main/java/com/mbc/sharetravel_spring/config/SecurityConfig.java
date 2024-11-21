@@ -38,7 +38,7 @@ public class SecurityConfig {
 			
 			http.authorizeRequests()
 				.antMatchers(HttpMethod.POST,"/login","/register","/User-Register","/travelBoard/posts","/test/img").permitAll()
-				.antMatchers(HttpMethod.GET, "/board", "/travelBoard/**", "/travelimg/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/travel-board", "/travelBoard/**", "/travelimg/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
 					.exceptionHandling()

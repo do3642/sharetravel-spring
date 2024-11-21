@@ -1,7 +1,12 @@
 package com.mbc.sharetravel_spring.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mbc.sharetravel_spring.domain.Member;
 import com.mbc.sharetravel_spring.posts.TravelBoard;
@@ -30,4 +35,16 @@ public class PostService {
 		return postRepository.save(post);
 	}
 	
+	
+//	//여행 정보 게시물 리스트 끊어호출
+//	@Transactional(readOnly = true)
+//	public Page<TravelBoard> getTravelList(Pageable pageable){
+//		return postRepository.findAll(pageable);
+//	}
+	@Transactional(readOnly = true)
+	public List<TravelBoard> getTravelList() {
+	    return postRepository.findAll();
+	}
+
+
 }

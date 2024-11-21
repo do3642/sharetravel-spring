@@ -17,30 +17,28 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mbc.sharetravel_spring.posts.TravelBoard;
 import com.mbc.sharetravel_spring.repository.PostRepository;
+import com.mbc.sharetravel_spring.service.PostService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class PostController {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostService postService;
 
     @PostMapping("/travelBoard/posts")
     public ResponseEntity<TravelBoard> createPost(@RequestBody TravelBoard post) {
-    	System.out.println(post.getContent());
     	System.out.println(post);
-        TravelBoard savedPost = postRepository.save(post);
-        return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
+    	
+    	postService.travelPosting(post);
+    	
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     
     @PostMapping("/test/img")
     public ResponseEntity<?> testImg(@RequestParam("image") MultipartFile file) throws Exception{
        String fileName = file.getOriginalFilename();
-//       Path path = Paths.get("/travelBdImg", fileName);
-//       Path path = Paths.get("travel_img", fileName);
        Path path = Paths.get("travelimg/", fileName);
-       System.out.println(path.getParent());
-       System.out.println("파일 저장 경로: " + path.toAbsolutePath());
        Files.createDirectories(path.getParent());
        Files.write(path, file.getBytes());
 

@@ -47,4 +47,12 @@ public class PostService {
 	}
 
 
+	
+	// 게시물 수정
+	public TravelBoard modifyTravelBoard(Integer id) {
+		
+		TravelBoard post = postRepository.findById(id).get();
+		
+		return post;
+	}
 }

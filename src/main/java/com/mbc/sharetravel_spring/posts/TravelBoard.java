@@ -28,7 +28,7 @@ public class TravelBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 게시글 고유번호
+    private Integer id; // 게시글 고유번호
     
     @Column(nullable = false, length = 100)
     private String category; // 카테고리(국내,국외)

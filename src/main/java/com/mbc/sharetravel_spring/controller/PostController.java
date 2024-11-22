@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +34,7 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    //게시물 등록 주소
     @PostMapping("/travelBoard/posts")
     public ResponseEntity<TravelBoard> createPost(@RequestBody TravelBoard post) {
     	System.out.println(post);
@@ -41,6 +44,7 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     
+    // 이미지 이름 등록한 이미지로 바꿔주고 서버에 저장하는 맵핑
     @PostMapping("/test/img")
     public ResponseEntity<?> testImg(@RequestParam("image") MultipartFile file) throws Exception{
        String fileName = file.getOriginalFilename();
@@ -52,6 +56,7 @@ public class PostController {
     }
     
     
+    // pageable방식
 //    @GetMapping("/travel-board")
 //    public Page<TravelBoard> getTravelList(@PageableDefault(size=15,sort="id",direction = Direction.DESC) Pageable pageable) {
 //    	
@@ -60,10 +65,24 @@ public class PostController {
 //    	return postList;
 //    }
 //    
+    
+    // 요청 시 travelBoard 전체 게시물 리턴
     @GetMapping("/travel-board")
     public List<TravelBoard> getTravelList() {
         List<TravelBoard> postList = postService.getTravelList();
         return postList;
     }
+    
+    
+    // 게시물 수정
+    @GetMapping("/travel-board/write/{id}")
+    public TravelBoard getModifyTravelBoard(@PathVariable Integer id) {
+      
+    	TravelBoard post = postService.modifyTravelBoard(id);
+    	
+    	return post;
+       
+    }
+ 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mbc.sharetravel_spring.domain.Member;
 import com.mbc.sharetravel_spring.posts.TravelBoard;
 import com.mbc.sharetravel_spring.repository.PostRepository;
+import com.mbc.sharetravel_spring.service.MemberService;
 import com.mbc.sharetravel_spring.service.PostService;
 
 @RestController
@@ -34,6 +37,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    
+    @Autowired
+    private MemberService memberService;
 
     //게시물 등록 주소
     @PostMapping("/travelBoard/posts")
@@ -48,8 +54,8 @@ public class PostController {
     // 이미지 이름 등록한 이미지로 바꿔주고 서버에 저장하는 맵핑
     @PostMapping("/test/img")
     public ResponseEntity<?> testImg(@RequestParam("image") MultipartFile file) throws Exception{
-       String fileName = file.getOriginalFilename();
-       Path path = Paths.get("travelimg/", fileName);
+    	String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        Path path = Paths.get("travelimg/", fileName);
        Files.createDirectories(path.getParent());
        Files.write(path, file.getBytes());
 
@@ -105,4 +111,25 @@ public class PostController {
     	
     }
 
+    //조회수 제한
+    @PostMapping("/travel-board/{postId}/increment-view")
+    public ResponseEntity<Void> incrementViewCount(@PathVariable Integer postId, Authentication auth) {
+        
+    	 // Authentication에서 사용자 이름(username) 추출
+        String username = (String) auth.getPrincipal();
+        
+        // username을 이용해 사용자의 ID를 가져오기
+        Member user = memberService.getMember(username); // userService에서 username을 통해 사용자 조회
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // 사용자가 없으면 403 Forbidden 반환
+        }
+
+        Integer userId = user.getId();  // 사용자 ID
+
+        // 게시물 조회수 증가
+        postService.incrementViewCount(postId, userId);
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -69,4 +69,23 @@ public class PostService {
 	public void deleteTravelBoard(Integer id) {
 		postRepository.deleteById(id);
 	}
+	
+	
+	// 조회수 1인당 1번
+	  public void incrementViewCount(Integer postId, Integer userId) {
+	        // 게시물 조회
+	        TravelBoard post = postRepository.findById(postId)
+	            .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
+
+	        // 사용자가 이미 조회한 적이 있는지 확인
+	        if (post.getViewedUsers().contains(userId)) {
+	            // 이미 조회한 경우, 조회수 증가하지 않음
+	            return;
+	        }
+
+	        // 사용자가 처음으로 조회한 경우
+	        post.setViewCount(post.getViewCount() + 1);
+	        post.getViewedUsers().add(userId); // 조회한 사용자 ID 추가
+	        postRepository.save(post); // 저장
+	    }
 }

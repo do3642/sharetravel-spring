@@ -2,8 +2,10 @@ package com.mbc.sharetravel_spring.posts;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -58,5 +60,8 @@ public class TravelBoard {
     
     @Lob
     private String content; // 내용
+    
+    @ElementCollection
+    private Set<Integer> viewedUsers; // 게시물을 본 사용자 ID들 (사용자당 1번만 조회수 증가)
     
 }

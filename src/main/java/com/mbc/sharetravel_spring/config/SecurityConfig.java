@@ -37,7 +37,7 @@ public class SecurityConfig {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS); // 세션안쓴다는 의미
 			
 			http.authorizeRequests()
-				.antMatchers(HttpMethod.POST,"/login","/register").permitAll()
+				.antMatchers(HttpMethod.POST,"/login","/register","/marketsell/*").permitAll()
 				.anyRequest().authenticated()
 				.and()
 					.exceptionHandling()

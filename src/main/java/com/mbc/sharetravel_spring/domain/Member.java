@@ -13,8 +13,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
 
@@ -45,6 +47,13 @@ public class Member {
 
     private int postCount = 0;
     private int commentCount = 0;
+    
+    @Transient // DB에 저장되지 않도록 설정
+    private MultipartFile thumbnail; // 썸네일 이미지 (실제 파일 객체)
+
+    @Column
+    private String thumbnailFilename; // 저장된 파일명 (파일 시스템에 저장된 파일명)
+
 
     @Enumerated(EnumType.STRING)
     private RoleType role;

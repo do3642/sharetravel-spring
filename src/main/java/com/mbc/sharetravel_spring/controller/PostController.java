@@ -3,7 +3,11 @@ package com.mbc.sharetravel_spring.controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -111,25 +115,49 @@ public class PostController {
     	
     }
 
-    //조회수 제한
+    
+    // 조회수 제한
     @PostMapping("/travel-board/{postId}/increment-view")
-    public ResponseEntity<Void> incrementViewCount(@PathVariable Integer postId, Authentication auth) {
+    public ResponseEntity<Void> incrementViewCount(@PathVariable Integer postId, Authentication auth, HttpSession session) {
+        // 세션에서 조회한 게시물 목록을 가져옴
+        Set<Integer> viewedPosts = (Set<Integer>) session.getAttribute("viewedPosts");
         
-    	 // Authentication에서 사용자 이름(username) 추출
-        String username = (String) auth.getPrincipal();
-        
-        // username을 이용해 사용자의 ID를 가져오기
-        Member user = memberService.getMember(username); // userService에서 username을 통해 사용자 조회
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();  // 사용자가 없으면 403 Forbidden 반환
+        if (viewedPosts == null) {
+            viewedPosts = new HashSet<>();
         }
 
-        Integer userId = user.getId();  // 사용자 ID
+        System.out.println("세션에서 조회한 게시물 목록: " + viewedPosts);  // 세션 상태 확인
 
-        // 게시물 조회수 증가
-        postService.incrementViewCount(postId, userId);
+        if (viewedPosts.contains(postId)) {
+            return ResponseEntity.ok().build(); // 이미 본 게시물이라 조회수 증가 안함
+        }
 
+        // 로그인한 사용자 처리
+        if (auth != null && auth.isAuthenticated()) {
+            String username = (String) auth.getPrincipal();
+            Member user = memberService.getMember(username);
+
+            if (user != null) {
+                Integer userId = user.getId();
+                postService.incrementViewCount(postId, userId);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } else {
+            // 비로그인 사용자의 경우, 조회수만 증가
+            postService.incrementViewCountForGuest(postId);
+        }
+
+        // 비로그인 사용자의 경우 세션에 조회한 게시물 ID 저장
+        viewedPosts.add(postId);
+        session.setAttribute("viewedPosts", viewedPosts); // 세션에 저장
+
+        System.out.println("세션에 저장된 게시물 목록: " + viewedPosts);
         return ResponseEntity.ok().build();
     }
+
+
+
+
 }

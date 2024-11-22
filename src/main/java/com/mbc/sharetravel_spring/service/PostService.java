@@ -63,4 +63,10 @@ public class PostService {
 		prevPost.setContent(post.getContent());
 		return postRepository.save(prevPost);
 	}
+	
+	
+	// 게시물 삭제
+	public void deleteTravelBoard(Integer id) {
+		postRepository.deleteById(id);
+	}
 }

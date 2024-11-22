@@ -55,4 +55,12 @@ public class PostService {
 		
 		return post;
 	}
+	
+	public TravelBoard travelModifyPosting(TravelBoard prevPost,TravelBoard post) {
+		prevPost.setCategory(post.getCategory());
+		prevPost.setLocation(post.getLocation());
+		prevPost.setTitle(post.getTitle());
+		prevPost.setContent(post.getContent());
+		return postRepository.save(prevPost);
+	}
 }

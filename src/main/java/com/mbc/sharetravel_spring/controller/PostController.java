@@ -83,6 +83,17 @@ public class PostController {
     	return post;
        
     }
+    
+    @PutMapping("/travel-board/write/{id}")
+    public ResponseEntity<TravelBoard> modifyPost(@RequestBody TravelBoard post, @PathVariable Integer id) {
+  
+    	TravelBoard prevPost = postService.modifyTravelBoard(id);
+    	System.out.println(prevPost);
+    	System.out.println(post);
+    	postService.travelModifyPosting(prevPost,post);
+    	
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
  
 
 }

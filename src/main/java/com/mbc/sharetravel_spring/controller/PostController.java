@@ -123,6 +123,13 @@ public class PostController {
     	postService.incrementViewCount(postId);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
+    @PostMapping("/travel-board/{postId}/like")
+    public ResponseEntity<Void> recommendationCount(@PathVariable Integer postId) {
+        // 조회한 게시물 목록을 가져옴
+    	System.out.println("좋아요테스트");
+    	postService.recommendationCount(postId);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 

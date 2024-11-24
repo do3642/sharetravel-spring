@@ -30,7 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mbc.sharetravel_spring.domain.Member;
+import com.mbc.sharetravel_spring.dto.CommentRequest;
+import com.mbc.sharetravel_spring.posts.Comment;
 import com.mbc.sharetravel_spring.posts.TravelBoard;
+import com.mbc.sharetravel_spring.repository.CommentRepository;
+import com.mbc.sharetravel_spring.repository.MemberRepository;
 import com.mbc.sharetravel_spring.repository.PostRepository;
 import com.mbc.sharetravel_spring.service.MemberService;
 import com.mbc.sharetravel_spring.service.PostService;
@@ -39,11 +43,18 @@ import com.mbc.sharetravel_spring.service.PostService;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PostController {
 
+	@Autowired
+	private PostRepository postRepository;
     @Autowired
     private PostService postService;
     
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
     private MemberService memberService;
+    
+    @Autowired
+    private CommentRepository commentRepository;
 
     //게시물 등록 주소
     @PostMapping("/travelBoard/posts")
@@ -123,15 +134,47 @@ public class PostController {
     	postService.incrementViewCount(postId);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
+    // 추천요청
     @PostMapping("/travel-board/{postId}/like")
     public ResponseEntity<Void> recommendationCount(@PathVariable Integer postId) {
-        // 조회한 게시물 목록을 가져옴
-    	System.out.println("좋아요테스트");
     	postService.recommendationCount(postId);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
+    
+    //댓글작성요청
+    @PostMapping("/travel-board/{postId}/comment")
+    public ResponseEntity<Void> addComment(@RequestBody CommentRequest commentRequest ) {
+    	
+    	System.out.println("댓글 잘 전송됨"+"게시물번호:"+commentRequest.getTravelBoardId()+"작성자ID:"+commentRequest.getMemberId()+"댓글내용:"+commentRequest.getContent());
+        TravelBoard travelBoard = postRepository.findById(commentRequest.getTravelBoardId()).orElseThrow(() -> new RuntimeException("게시물이 없습니다."));
+        Member member = memberRepository.findById(commentRequest.getMemberId()).orElseThrow(() -> new RuntimeException("작성자가 없습니다."));
+        Comment comment = new Comment();
+        comment.setContent(commentRequest.getContent());
+        comment.setTravelBoard(travelBoard);
+        comment.setMember(member);
+        commentRepository.save(comment);
+
+    	
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    //댓글 목록 요청
+    @PostMapping("/travel-board/{postId}/comments")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable Integer postId) {
+        List<Comment> comments = commentRepository.findByTravelBoardIdOrderByCreateDateDesc(postId);
+//        List<Comment> comments = commentRepository.findByTravelBoardId(postId);  // 댓글을 조회
+        return ResponseEntity.ok(comments);
+    }
+    
+    
+    // 댓글추천요청
+    @PostMapping("/travel-board/{postId}/commentLike")
+    public ResponseEntity<Void> commentLike(@PathVariable Integer postId) {
+    	postService.recommendationCount(postId);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 
 }

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mbc.sharetravel_spring.domain.Member;
 
 import lombok.AllArgsConstructor;
@@ -49,7 +51,8 @@ public class TravelBoard {
     @ManyToOne
     private Member member; // 게시글 작성자 (유저 정보)
     
-    @OneToMany(mappedBy = "travelBoard")
+    @OneToMany(mappedBy = "travelBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonManagedReference
     private List<Comment> comments; // 해당 게시글에 달린 댓글들
     
     @Column(nullable = false)

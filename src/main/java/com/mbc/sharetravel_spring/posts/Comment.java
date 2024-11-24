@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mbc.sharetravel_spring.domain.Member;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +35,11 @@ public class Comment {
     private Timestamp createDate; // 댓글 작성일
 
     @ManyToOne
+    @JsonBackReference
     private TravelBoard travelBoard; // 해당 댓글이 달린 자유게시판 게시글 (유효한 경우)
+    
+    private int likes = 0;
+    private int dislikes = 0;
 
 
     @ManyToOne

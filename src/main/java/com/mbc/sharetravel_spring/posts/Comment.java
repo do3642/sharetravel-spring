@@ -28,7 +28,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 댓글 고유번호
+    private Integer id; // 댓글 고유번호
 
     @Column(nullable = false)
     private String content; // 댓글 내용

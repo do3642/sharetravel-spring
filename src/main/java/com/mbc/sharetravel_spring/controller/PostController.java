@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -175,6 +176,24 @@ public class PostController {
     	postService.recommendationCount(postId);
     	return new ResponseEntity<>(HttpStatus.OK);
     }
+    
+    //댓글 삭제 요청
+    @DeleteMapping("/travel-board/{postId}/deleteComments/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Integer commentId) {
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        
+        System.out.println(commentId);
+        System.out.println(comment);
+        // 댓글이 존재하는지 확인
+        if (comment.isPresent()) {
+            // 댓글 삭제
+            commentRepository.deleteById(commentId);
+            return ResponseEntity.ok("댓글이 성공적으로 삭제되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("댓글을 찾을 수 없습니다.");
+        }
+    }
+
 
 
 }

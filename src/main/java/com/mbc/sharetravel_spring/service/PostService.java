@@ -80,4 +80,30 @@ public class PostService {
 		postRepository.deleteById(id);
 		
 	}
+	
+	
+
+
+	//조회수 증가
+	public void incrementViewCount(Integer postId) {
+	    // 게시물 조회
+	    TravelBoard post = postRepository.findById(postId)
+	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
+
+	    post.setViewCount(post.getViewCount() + 1);
+	    
+	    postRepository.save(post); // 저장
+	}
+	
+	//추천 증가
+	public void recommendationCount(Integer postId) {
+	    // 게시물 조회
+	    TravelBoard post = postRepository.findById(postId)
+	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
+
+	    post.setRecommendationCount(post.getRecommendationCount() + 1);
+	    
+	    postRepository.save(post); // 저장
+	}
+	
 }

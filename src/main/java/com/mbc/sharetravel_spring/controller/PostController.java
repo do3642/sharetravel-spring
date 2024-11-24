@@ -116,45 +116,12 @@ public class PostController {
     }
 
     
-    // 조회수 제한
+    // 조회수
     @PostMapping("/travel-board/{postId}/increment-view")
-    public ResponseEntity<Void> incrementViewCount(@PathVariable Integer postId, Authentication auth, HttpSession session) {
-        // 세션에서 조회한 게시물 목록을 가져옴
-        Set<Integer> viewedPosts = (Set<Integer>) session.getAttribute("viewedPosts");
-        
-
-        if (viewedPosts == null) {
-            viewedPosts = new HashSet<>();
-        }
-
-        System.out.println("세션에서 조회한 게시물 목록: " + viewedPosts);  // 세션 상태 확인
-
-        if (viewedPosts.contains(postId)) {
-            return ResponseEntity.ok().build(); // 이미 본 게시물이라 조회수 증가 안함
-        }
-
-        // 로그인한 사용자 처리
-        if (auth != null && auth.isAuthenticated()) {
-            String username = (String) auth.getPrincipal();
-            Member user = memberService.getMember(username);
-
-            if (user != null) {
-                Integer userId = user.getId();
-                postService.incrementViewCount(postId, userId);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-        } else {
-            // 비로그인 사용자의 경우, 조회수만 증가
-            postService.incrementViewCountForGuest(postId);
-        }
-
-        // 비로그인 사용자의 경우 세션에 조회한 게시물 ID 저장
-        viewedPosts.add(postId);
-        session.setAttribute("viewedPosts", viewedPosts); // 세션에 저장
-
-        System.out.println("세션에 저장된 게시물 목록: " + viewedPosts);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> incrementViewCount(@PathVariable Integer postId) {
+        // 조회한 게시물 목록을 가져옴
+    	postService.incrementViewCount(postId);
+    	return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

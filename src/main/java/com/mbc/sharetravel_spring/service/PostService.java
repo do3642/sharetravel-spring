@@ -71,33 +71,28 @@ public class PostService {
 	}
 	
 	
-	// 조회수 1인당 1번
-	// 비로그인 사용자를 위한 조회수 증가 메서드
-	public void incrementViewCountForGuest(Integer postId) {
+
+
+	//조회수 증가
+	public void incrementViewCount(Integer postId) {
 	    // 게시물 조회
 	    TravelBoard post = postRepository.findById(postId)
 	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
 
-	    // 비로그인 사용자는 조회수만 증가
 	    post.setViewCount(post.getViewCount() + 1);
+	    
 	    postRepository.save(post); // 저장
 	}
-
-
-	public void incrementViewCount(Integer postId, Integer userId) {
+	
+	//추천 증가
+	public void recommendationCount(Integer postId) {
 	    // 게시물 조회
 	    TravelBoard post = postRepository.findById(postId)
 	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
 
-	    // 사용자가 이미 조회한 적이 있는지 확인
-	    if (post.getViewedUsers().contains(userId)) {
-	        // 이미 조회한 경우, 조회수 증가하지 않음
-	        return;
-	    }
-
-	    // 사용자가 처음으로 조회한 경우
-	    post.setViewCount(post.getViewCount() + 1);
-	    post.getViewedUsers().add(userId); // 조회한 사용자 ID 추가
+	    post.setRecommendationCount(post.getRecommendationCount() + 1);
+	    
 	    postRepository.save(post); // 저장
 	}
+	
 }

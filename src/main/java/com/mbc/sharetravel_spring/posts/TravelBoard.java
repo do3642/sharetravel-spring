@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mbc.sharetravel_spring.domain.Member;
 
@@ -51,7 +52,8 @@ public class TravelBoard {
     @ManyToOne
     private Member member; // 게시글 작성자 (유저 정보)
     
-    @OneToMany(mappedBy = "travelBoard", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnoreProperties("comments")
+    @OneToMany(mappedBy = "travelBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Comment> comments; // 해당 게시글에 달린 댓글들
     
@@ -67,4 +69,16 @@ public class TravelBoard {
     @ElementCollection
     private Set<Integer> viewedUsers; // 게시물을 본 사용자 ID들 (사용자당 1번만 조회수 증가)
     
+    
+    
+    @Override
+    public String toString() {
+        return "TravelBoard{" +
+                "id=" + id +
+                ", category='" + category + '\'' +
+                ", location='" + location + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

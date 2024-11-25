@@ -25,12 +25,14 @@ public class PostService {
 	
 	
 	//여행 정보 게시물 등록
+	@Transactional
 	public TravelBoard travelPosting(TravelBoard post) {
 		
-		Member member =post.getMember();
+		Member member = memberRepository.findById(post.getMember().getId()).get();
 		// 등록 시 내 게시물 수 증가
 		member.setPostCount(member.getPostCount()+1);
-		memberRepository.save(member);
+		System.out.println("member::::" + member);
+//		memberRepository.save(member);
 		
 		return postRepository.save(post);
 	}
@@ -67,6 +69,41 @@ public class PostService {
 	
 	// 게시물 삭제
 	public void deleteTravelBoard(Integer id) {
+		
+		TravelBoard post = postRepository.findById(id).get();
+		Member member = post.getMember();
+		
+		// 게시물 안에 멤버를 가져와 게시물카운트 -1
+		member.setPostCount(member.getPostCount()-1);
+		memberRepository.save(member);
+		
 		postRepository.deleteById(id);
+		
 	}
+	
+	
+
+
+	//조회수 증가
+	public void incrementViewCount(Integer postId) {
+	    // 게시물 조회
+	    TravelBoard post = postRepository.findById(postId)
+	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
+
+	    post.setViewCount(post.getViewCount() + 1);
+	    
+	    postRepository.save(post); // 저장
+	}
+	
+	//추천 증가
+	public void recommendationCount(Integer postId) {
+	    // 게시물 조회
+	    TravelBoard post = postRepository.findById(postId)
+	        .orElseThrow(() -> new RuntimeException("게시물을 찾을 수 없습니다"));
+
+	    post.setRecommendationCount(post.getRecommendationCount() + 1);
+	    
+	    postRepository.save(post); // 저장
+	}
+	
 }

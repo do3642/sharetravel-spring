@@ -11,6 +11,9 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mbc.sharetravel_spring.domain.Member;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +28,7 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 댓글 고유번호
+    private Integer id; // 댓글 고유번호
 
     @Column(nullable = false)
     private String content; // 댓글 내용
@@ -33,10 +36,26 @@ public class Comment {
     @CreationTimestamp
     private Timestamp createDate; // 댓글 작성일
 
+    @JsonIgnoreProperties("travelBoard")
     @ManyToOne
+    @JsonBackReference
     private TravelBoard travelBoard; // 해당 댓글이 달린 자유게시판 게시글 (유효한 경우)
+    
+    private int likes = 0;
+    private int dislikes = 0;
 
 
     @ManyToOne
     private Member member; // 댓글 작성자 (유저 정보)
+    
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", createDate=" + createDate +
+                ", likes=" + likes +
+                ", dislikes=" + dislikes +
+                '}';
+    }
 }

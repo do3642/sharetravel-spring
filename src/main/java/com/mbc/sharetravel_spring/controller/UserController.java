@@ -18,7 +18,7 @@ import com.mbc.sharetravel_spring.domain.MemberCredentials;
 import com.mbc.sharetravel_spring.service.JwtService;
 import com.mbc.sharetravel_spring.service.MemberService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 public class UserController {
 	

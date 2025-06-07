@@ -6,19 +6,33 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 public class WebConfig implements WebMvcConfigurer{
 
+	// @Override
+	// public void addCorsMappings(CorsRegistry registry) {
+	// 	registry.addMapping("/**") //허용할 주소 (내 주소중에)
+	// 	.allowedOrigins("http://localhost:3000") //누구한테 허용할건지 (요청보내오는?보내고있는주소)
+	// 	.allowedMethods("GET","POST","PUT","DELETE");
+	// }
+
+	// @Override
+	// public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	// registry.addResourceHandler("/travelimg/**")
+	// .addResourceLocations("file:travelimg/");
+	// registry.addResourceHandler("/marketsell/*")
+	// 			.addResourceLocations("file:upload/");
+	// }
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**") //허용할 주소 (내 주소중에)
-		.allowedOrigins("http://localhost:3000") //누구한테 허용할건지 (요청보내오는?보내고있는주소)
+		.allowedOrigins("http://54.180.25.16") //누구한테 허용할건지 (요청보내오는?보내고있는주소)
 		.allowedMethods("GET","POST","PUT","DELETE");
 	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	registry.addResourceHandler("/travelimg/**")
-	.addResourceLocations("file:travelimg/");
-	registry.addResourceHandler("/marketsell/*")
-				.addResourceLocations("file:upload/");
+	.addResourceLocations("file:/home/ubuntu/travelimg/");
+	registry.addResourceHandler("/marketsell/**")
+				.addResourceLocations("file:/home/ubuntu/upload/");
 	}
 
 }

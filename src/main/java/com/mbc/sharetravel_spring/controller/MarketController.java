@@ -44,7 +44,8 @@ public class MarketController {
             // 파일 저장
             for (MultipartFile file : files) {
                 String uniqueFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-                Path path = Paths.get("upload/" + uniqueFileName);
+                // Path path = Paths.get("upload/" + uniqueFileName);
+                Path path = Paths.get("/home/ubuntu/upload/" + uniqueFileName);
                 Files.createDirectories(path.getParent());
                 Files.write(path, file.getBytes());
 

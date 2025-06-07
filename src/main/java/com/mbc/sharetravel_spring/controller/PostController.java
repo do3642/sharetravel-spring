@@ -41,7 +41,8 @@ import com.mbc.sharetravel_spring.service.MemberService;
 import com.mbc.sharetravel_spring.service.PostService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://54.180.25.16")
 public class PostController {
 
 	@Autowired
@@ -60,7 +61,7 @@ public class PostController {
     //게시물 등록 주소
     @PostMapping("/travelBoard/posts")
     public ResponseEntity<TravelBoard> createPost(@RequestBody TravelBoard post) {
-    	System.out.println(post);
+    	// System.out.println(post);
     	
     	postService.travelPosting(post);
     	
@@ -71,11 +72,17 @@ public class PostController {
     @PostMapping("/test/img")
     public ResponseEntity<?> testImg(@RequestParam("image") MultipartFile file) throws Exception{
     	String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        Path path = Paths.get("travelimg/", fileName);
+
+        // Path path = Paths.get("travelimg/", fileName);
+        // EC2 절대 경로로 수정
+        Path path = Paths.get("/home/ubuntu/travelimg/", fileName);
+
        Files.createDirectories(path.getParent());
        Files.write(path, file.getBytes());
 
-       return new ResponseEntity<>("/travelimg/"+fileName, HttpStatus.OK);
+    //    return new ResponseEntity<>("/travelimg/"+fileName, HttpStatus.OK);
+     // 클라이언트에서 접근 가능한 URL 경로를 반환 (Nginx alias 설정 기준)
+    return new ResponseEntity<>("/travelimg/" + fileName, HttpStatus.OK);
     }
     
     

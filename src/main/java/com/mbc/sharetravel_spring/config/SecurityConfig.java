@@ -55,7 +55,9 @@ public class SecurityConfig {
 	@Bean // 여기 파트가 크로스 오리진 관련
 	CorsConfigurationSource configurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.addAllowedOrigin("http://localhost:3000");
+		// config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedOrigin("http://54.180.25.16");
+
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);

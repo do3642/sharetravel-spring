@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer{
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**") //허용할 주소 (내 주소중에)
-		.allowedOrigins("http://54.180.25.16") //누구한테 허용할건지 (요청보내오는?보내고있는주소)
+		.allowedOrigins("http://13.125.31.228") //누구한테 허용할건지 (요청보내오는?보내고있는주소)
 		.allowedMethods("GET","POST","PUT","DELETE");
 	}
 

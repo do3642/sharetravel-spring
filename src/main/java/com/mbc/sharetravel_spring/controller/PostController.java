@@ -42,7 +42,7 @@ import com.mbc.sharetravel_spring.service.PostService;
 
 @RestController
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://54.180.25.16")
+@CrossOrigin(origins = "http://13.125.31.228")
 public class PostController {
 
 	@Autowired
